@@ -1,0 +1,20 @@
+# Local Node modules
+node_modules/
+
+# Ignore ingestion API and SDK folders as requested
+ingestion-api/
+sdk/
+docker-compose.yml
+package.json
+package-lock.json
+
+# Next.js build outputs and dependencies
+dashboard/node_modules/
+dashboard/.next/
+dashboard/out/
+dashboard/build/
+
+# Do NOT commit local environment credentials to GitHub
+dashboard/.env
+.env
+*.local
