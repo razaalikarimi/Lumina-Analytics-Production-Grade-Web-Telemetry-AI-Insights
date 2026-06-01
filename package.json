@@ -1,0 +1,13 @@
+{
+  "name": "lumina-analytics-root",
+  "version": "1.0.0",
+  "description": "Root orchestrator for Lumina Analytics Ingestion API and Dashboard",
+  "scripts": {
+    "install:all": "npm install --prefix ingestion-api && npm install --prefix dashboard",
+    "dev": "concurrently --kill-others-on-fail \"npm run dev:server --prefix ingestion-api\" \"npm run dev --prefix dashboard\"",
+    "dev:worker": "npm run dev:worker --prefix ingestion-api"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
