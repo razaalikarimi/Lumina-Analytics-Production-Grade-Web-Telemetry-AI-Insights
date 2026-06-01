@@ -1,0 +1,57 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Website {
+  id        String    @id @default(uuid())
+  name      String
+  domain    String
+  apiKey    String    @unique @map("api_key")
+  createdAt DateTime  @default(now()) @map("created_at")
+  sessions  Session[]
+  events    Event[]
+
+  @@map("websites")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  websiteId String   @map("website_id")
+  sessionId String   @map("session_id")
+  browser   String?
+  os        String?
+  device    String?
+  country   String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  website   Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  events    Event[]
+
+  @@unique([websiteId, sessionId])
+  @@index([createdAt])
+  @@map("sessions")
+}
+
+model Event {
+  id        String   @id @default(uuid())
+  sessionId String   @map("session_id")
+  websiteId String   @map("website_id")
+  eventName String   @map("event_name")
+  eventData Json?    @map("event_data")
+  url       String   @db.Text
+  referrer  String?  @db.Text
+  timestamp DateTime @default(now())
+
+  website   Website  @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  session   Session  @relation(fields: [websiteId, sessionId], references: [websiteId, sessionId], onDelete: Cascade)
+
+  @@index([websiteId, timestamp])
+  @@index([sessionId])
+  @@index([eventName])
+  @@map("events")
+}
